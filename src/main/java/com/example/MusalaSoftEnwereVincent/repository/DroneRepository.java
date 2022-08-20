@@ -1,6 +1,6 @@
-package com.example.luxoftenwerevincent.repository;
+package com.example.MusalaSoftEnwereVincent.repository;
 
-import com.example.luxoftenwerevincent.model.Drone;
+import com.example.MusalaSoftEnwereVincent.model.Drone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

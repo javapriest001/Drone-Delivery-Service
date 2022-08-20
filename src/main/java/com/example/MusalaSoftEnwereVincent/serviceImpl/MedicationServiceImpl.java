@@ -1,14 +1,13 @@
-package com.example.luxoftenwerevincent.serviceImpl;
+package com.example.MusalaSoftEnwereVincent.serviceImpl;
 
-import com.example.luxoftenwerevincent.DTO.MedicationDTO;
-import com.example.luxoftenwerevincent.exception.MedicationNotSavedException;
-import com.example.luxoftenwerevincent.model.Medication;
-import com.example.luxoftenwerevincent.repository.MedicationRepository;
-import com.example.luxoftenwerevincent.service.MedicationService;
+import com.example.MusalaSoftEnwereVincent.DTO.MedicationDTO;
+import com.example.MusalaSoftEnwereVincent.exception.MedicationNotSavedException;
+import com.example.MusalaSoftEnwereVincent.model.Medication;
+import com.example.MusalaSoftEnwereVincent.repository.MedicationRepository;
+import com.example.MusalaSoftEnwereVincent.service.MedicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

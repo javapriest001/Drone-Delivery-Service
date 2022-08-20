@@ -1,11 +1,11 @@
-package com.example.luxoftenwerevincent.serviceImpl;
+package com.example.MusalaSoftEnwereVincent.serviceImpl;
 
-import com.example.luxoftenwerevincent.enumeration.State;
-import com.example.luxoftenwerevincent.exception.DroneNotFoundException;
-import com.example.luxoftenwerevincent.model.Drone;
-import com.example.luxoftenwerevincent.model.Medication;
-import com.example.luxoftenwerevincent.repository.DroneRepository;
-import com.example.luxoftenwerevincent.service.DroneService;
+import com.example.MusalaSoftEnwereVincent.enumeration.State;
+import com.example.MusalaSoftEnwereVincent.exception.DroneNotFoundException;
+import com.example.MusalaSoftEnwereVincent.model.Drone;
+import com.example.MusalaSoftEnwereVincent.model.Medication;
+import com.example.MusalaSoftEnwereVincent.repository.DroneRepository;
+import com.example.MusalaSoftEnwereVincent.service.DroneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -35,6 +35,7 @@ public class DroneServiceImpl implements DroneService {
         return  droneRepository.findAll();
     }
 
+
     @Override
     public Drone createDrone(Drone drone) {
         return droneRepository.save(drone);
@@ -44,6 +45,13 @@ public class DroneServiceImpl implements DroneService {
     public State checkingLoadStatus(String serialNumber) {
         return  findDroneById(serialNumber).getStateOfDuty();
     }
+
+    @Override
+    public List<Drone> getAvailableDrones(List<Drone> allDroneLists) {
+            return  allDroneLists.stream().filter(drone -> drone.getBatteryCapacity() >= 25 && drone.getStateOfDuty() == State.IDLE)
+                        .toList();
+    }
+
 
     @Override
     public boolean loadDrone(String serialNumber, List<Medication> medicationList) {
@@ -70,6 +78,8 @@ public class DroneServiceImpl implements DroneService {
         }
         return isLoaded;
     }
+
+
 
     public short calculateMedicationWeight(List<Short> medicationList){
         short count = 0;

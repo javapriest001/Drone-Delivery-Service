@@ -1,4 +1,4 @@
-package com.example.luxoftenwerevincent.exception;
+package com.example.MusalaSoftEnwereVincent.exception;
 
 public class DroneNotFoundException extends RuntimeException{
     public DroneNotFoundException(String droneId){

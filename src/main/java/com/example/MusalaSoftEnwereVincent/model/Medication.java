@@ -1,4 +1,4 @@
-package com.example.luxoftenwerevincent.model;
+package com.example.MusalaSoftEnwereVincent.model;
 
 import lombok.*;
 

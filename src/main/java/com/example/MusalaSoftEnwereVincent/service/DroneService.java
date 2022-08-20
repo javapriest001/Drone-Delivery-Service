@@ -1,13 +1,11 @@
-package com.example.luxoftenwerevincent.service;
+package com.example.MusalaSoftEnwereVincent.service;
 
 
-import com.example.luxoftenwerevincent.enumeration.State;
-import com.example.luxoftenwerevincent.model.Drone;
-import com.example.luxoftenwerevincent.model.Medication;
-import org.springframework.stereotype.Service;
+import com.example.MusalaSoftEnwereVincent.enumeration.State;
+import com.example.MusalaSoftEnwereVincent.model.Drone;
+import com.example.MusalaSoftEnwereVincent.model.Medication;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public interface DroneService {
@@ -16,6 +14,8 @@ public interface DroneService {
     List<Drone> getAllDrones();
     Drone createDrone(Drone drone);
     State checkingLoadStatus(String serialNumber);
+
+    List<Drone> getAvailableDrones(List<Drone> allDroneLists);
     boolean loadDrone(String serialNumber , List<Medication> medicationList);
     int checkBatteryLevel(String serialNumber);
 

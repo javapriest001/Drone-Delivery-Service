@@ -1,10 +1,10 @@
-package com.example.luxoftenwerevincent;
+package com.example.MusalaSoftEnwereVincent;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class LuxoftEnwereVincentApplicationTests {
+class MusalaSoftEnwereVincentApplicationTests {
 
     @Test
     void contextLoads() {

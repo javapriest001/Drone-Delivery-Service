@@ -1,9 +1,9 @@
-package com.example.luxoftenwerevincent.controller;
+package com.example.MusalaSoftEnwereVincent.controller;
 
-import com.example.luxoftenwerevincent.enumeration.State;
-import com.example.luxoftenwerevincent.model.Drone;
-import com.example.luxoftenwerevincent.model.Medication;
-import com.example.luxoftenwerevincent.service.DroneService;
+import com.example.MusalaSoftEnwereVincent.enumeration.State;
+import com.example.MusalaSoftEnwereVincent.model.Drone;
+import com.example.MusalaSoftEnwereVincent.model.Medication;
+import com.example.MusalaSoftEnwereVincent.service.DroneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +30,11 @@ public class DroneController {
     @PostMapping(value = "/register")
     public Drone registerDrone(@RequestBody  Drone drone){
         return droneService.createDrone(drone);
+    }
+
+    @GetMapping(value = "/availabledrones")
+    public List<Drone> listOfAvailableDrones(){
+        return droneService.getAvailableDrones(ListOfDrones());
     }
     @GetMapping(value="/drone/{serialNumber}")
     public Drone getDroneById(@PathVariable String serialNumber){

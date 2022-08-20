@@ -1,9 +1,8 @@
-package com.example.luxoftenwerevincent.model;
-import com.example.luxoftenwerevincent.enumeration.Model;
-import com.example.luxoftenwerevincent.enumeration.State;
+package com.example.MusalaSoftEnwereVincent.model;
+import com.example.MusalaSoftEnwereVincent.enumeration.Model;
+import com.example.MusalaSoftEnwereVincent.enumeration.State;
 
 import lombok.*;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

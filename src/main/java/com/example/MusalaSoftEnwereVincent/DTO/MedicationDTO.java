@@ -1,9 +1,7 @@
-package com.example.luxoftenwerevincent.DTO;
+package com.example.MusalaSoftEnwereVincent.DTO;
 
 
 import lombok.*;
-
-import javax.persistence.Entity;
 
 @Getter
 @Setter
