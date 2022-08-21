@@ -1,12 +1,10 @@
 package com.example.MusalaSoftEnwereVincent.controller;
 
 import com.example.MusalaSoftEnwereVincent.Response.*;
-import com.example.MusalaSoftEnwereVincent.enumeration.State;
 import com.example.MusalaSoftEnwereVincent.model.Drone;
 import com.example.MusalaSoftEnwereVincent.model.Medication;
 import com.example.MusalaSoftEnwereVincent.service.DroneService;
 import com.example.MusalaSoftEnwereVincent.service.MedicationService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +45,7 @@ public class DroneController {
 
     @GetMapping(value = "/availabledrones")
     public AvailableDroneResponse listOfAvailableDrones(){
+        droneService.periodicCheckForBatteryHealth(droneService.getAllDrones());
         return droneService.getAvailableDrones(droneService.getAllDrones());
     }
 
@@ -54,7 +53,6 @@ public class DroneController {
     public Drone getDroneById(@PathVariable("serialNumber") String serialNumber){
         return droneService.findDroneById(serialNumber);
     }
-
 
     @GetMapping(value="/{serialNumber}/medications")
     public LoadedMedicationResponse getMedications(@PathVariable("serialNumber")  String serialNumber){
@@ -70,7 +68,7 @@ public class DroneController {
     public LoadDroneResponse loadDrone(@PathVariable(value = "serialNumber") String serialNumber , @PathVariable(value = "medCode") String medCode){
         return droneService.loadMedication(serialNumber, medCode);
     }
-    //@PostMapping(value="")
+
 
 
 }

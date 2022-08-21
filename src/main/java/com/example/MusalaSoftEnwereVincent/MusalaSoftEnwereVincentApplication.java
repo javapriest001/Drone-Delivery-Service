@@ -29,17 +29,15 @@ public class MusalaSoftEnwereVincentApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        Medication newMed = new Medication("MD1" , "Anti-Malaria",  95, "0xe2bcf.png");
-//        Medication newMed2 = new Medication("MD2" , "Anti-Malaria",  95, "0xe2bcf.png");
-//        List<Medication> medList = new ArrayList<>();
-//        medList.add(newMed);
-//        medList.add(newMed2);
-//        medicationRepository.save(newMed);
-//        medicationRepository.save(newMed2);
-//        medicationRepository.save(new Medication("MD3" , "Ibuprofen",  50, "0xudbcf.png"));
-//        medicationRepository.save(new Medication("MD4" , "Sidenafil",  150, "0xudbcf.png"));
-//        medicationRepository.save(new Medication("MD5" , "7-keys",  50, "0xudbcf.png"));
-//
+        Medication newMed = new Medication("MD1" , "Anti-Malaria",  95, "0xe2bcf.png");
+        Medication newMed2 = new Medication("MD2" , "Anti-Malaria",  95, "0xe2bcf.png");
+
+        medicationRepository.save(newMed);
+        medicationRepository.save(newMed2);
+        medicationRepository.save(new Medication("MD3" , "Ibuprofen",  50, "0xudbcf.png"));
+        medicationRepository.save(new Medication("MD4" , "Sidenafil",  150, "0xudbcf.png"));
+        medicationRepository.save(new Medication("MD5" , "7-keys",  50, "0xudbcf.png"));
+
 //        System.out.println(medicationRepository.findAll());
 
         droneRepository.save(new Drone("DRN1", Model.HEAVYWEIGHT , (short) 500, 100, State.IDLE , null) );

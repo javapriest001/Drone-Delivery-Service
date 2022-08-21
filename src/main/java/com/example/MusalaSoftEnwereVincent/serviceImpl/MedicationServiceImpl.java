@@ -1,6 +1,4 @@
 package com.example.MusalaSoftEnwereVincent.serviceImpl;
-
-import com.example.MusalaSoftEnwereVincent.DTO.MedicationDTO;
 import com.example.MusalaSoftEnwereVincent.exception.MedicationNotFoundException;
 import com.example.MusalaSoftEnwereVincent.exception.MedicationNotSavedException;
 import com.example.MusalaSoftEnwereVincent.model.Medication;

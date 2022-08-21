@@ -10,12 +10,16 @@ import com.example.MusalaSoftEnwereVincent.model.Medication;
 import com.example.MusalaSoftEnwereVincent.repository.DroneRepository;
 import com.example.MusalaSoftEnwereVincent.repository.MedicationRepository;
 import com.example.MusalaSoftEnwereVincent.service.DroneService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.stream.Collectors;
 
 //TODO: Introduce a periodic task to check drones battery levels and create history/audit event log for this.
@@ -47,7 +51,6 @@ public class DroneServiceImpl implements DroneService {
         return  droneRepository.findAll();
     }
 
-
     @Override
     public RegisterResponse createDrone(Drone drone) {
          droneRepository.save(drone);
@@ -60,7 +63,6 @@ public class DroneServiceImpl implements DroneService {
                         .toList();
             return  new AvailableDroneResponse("success" , LocalDateTime.now() , availableDrones);
     }
-
 
     public LoadDroneResponse loadMedication(String droneSerialCode, String medicationCode){
         LoadDroneResponse loadDroneResponse = new LoadDroneResponse();
@@ -94,12 +96,25 @@ public class DroneServiceImpl implements DroneService {
         return loadDroneResponse;
     }
 
-
-
     @Override
     public LoadedMedicationResponse loadedMedicationsForADrone(String serialNumber) {
         Drone drone = findDroneById(serialNumber);
         return  new LoadedMedicationResponse("success" , LocalDateTime.now() , drone.getSerialNumber() ,  drone.getMedication() );
+    }
+
+    @Override
+    public void periodicCheckForBatteryHealth(List<Drone> drones) {
+        Logger logger = LoggerFactory.getLogger(DroneServiceImpl.class);
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                drones.forEach(drone ->  logger
+                        .info("Battery Level for --- " + drone.getSerialNumber() + " is " + drone.getBatteryCapacity()));
+            }
+        } ,2000, 200000);
+
+
     }
 
     @Override

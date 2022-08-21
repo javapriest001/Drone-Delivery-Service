@@ -2,9 +2,7 @@ package com.example.MusalaSoftEnwereVincent.service;
 
 
 import com.example.MusalaSoftEnwereVincent.Response.*;
-import com.example.MusalaSoftEnwereVincent.enumeration.State;
 import com.example.MusalaSoftEnwereVincent.model.Drone;
-import com.example.MusalaSoftEnwereVincent.model.Medication;
 
 import java.util.List;
 
@@ -22,6 +20,8 @@ public interface DroneService {
     LoadDroneResponse loadMedication(String droneSerialCode, String medicationCode);
 
     LoadedMedicationResponse loadedMedicationsForADrone(String serialNumber);
+
+    void periodicCheckForBatteryHealth(List<Drone> drones);
 
 
 }
