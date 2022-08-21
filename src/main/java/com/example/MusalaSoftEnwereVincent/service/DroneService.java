@@ -1,6 +1,7 @@
 package com.example.MusalaSoftEnwereVincent.service;
 
 
+import com.example.MusalaSoftEnwereVincent.Response.*;
 import com.example.MusalaSoftEnwereVincent.enumeration.State;
 import com.example.MusalaSoftEnwereVincent.model.Drone;
 import com.example.MusalaSoftEnwereVincent.model.Medication;
@@ -12,17 +13,15 @@ public interface DroneService {
 
     Drone findDroneById(String serialNumber);
     List<Drone> getAllDrones();
-    Drone createDrone(Drone drone);
-    State checkingLoadStatus(String serialNumber);
+    RegisterResponse createDrone(Drone drone);
 
-    List<Drone> getAvailableDrones(List<Drone> allDroneLists);
-    boolean loadDrone(String serialNumber , List<Medication> medicationList);
-    int checkBatteryLevel(String serialNumber);
+    AvailableDroneResponse getAvailableDrones(List<Drone> allDroneLists);
 
-    short calculateMedicationWeight(List<Short> medicationList);
+    BatteryLevelResponse checkBatteryLevel(String serialNumber);
 
-    List<Short> listOfMedicationWeight(List<Medication> medicationList);
+    LoadDroneResponse loadMedication(String droneSerialCode, String medicationCode);
 
+    LoadedMedicationResponse loadedMedicationsForADrone(String serialNumber);
 
 
 }

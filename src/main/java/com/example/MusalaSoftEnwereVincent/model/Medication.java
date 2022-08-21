@@ -1,23 +1,23 @@
 package com.example.MusalaSoftEnwereVincent.model;
 
 import lombok.*;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-@ToString
 @Entity
+@Data
 public class Medication {
     @Id
     private String code;
     private String name;
-    private short weight;
+    private int weight;
     private String image;
+//    @ManyToOne
+//    @JoinColumn(name = "droneId")
+//    private Drone drone;
 
 
 }

@@ -1,6 +1,7 @@
 package com.example.MusalaSoftEnwereVincent.serviceImpl;
 
 import com.example.MusalaSoftEnwereVincent.DTO.MedicationDTO;
+import com.example.MusalaSoftEnwereVincent.exception.MedicationNotFoundException;
 import com.example.MusalaSoftEnwereVincent.exception.MedicationNotSavedException;
 import com.example.MusalaSoftEnwereVincent.model.Medication;
 import com.example.MusalaSoftEnwereVincent.repository.MedicationRepository;
@@ -8,6 +9,7 @@ import com.example.MusalaSoftEnwereVincent.service.MedicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,22 +24,32 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
-    public Medication createMedication(MedicationDTO medicationDTO) {
-        Medication medication = new Medication();
-        if (validateName(medicationDTO.getName())){
-            if (validateCode(medicationDTO.getCode())){
-                medication.setName(medicationDTO.getName());
-                medication.setCode(medicationDTO.getCode());
-                medication.setWeight(medicationDTO.getWeight());
-                medication.setImage(medicationDTO.getImage());
+    public Medication createMedication(Medication medication) {
+      //  Medication medication = new Medication();
+        if (validateName(medication.getName())){
+            if (validateCode(medication.getCode())){
+//                medication.setName(medication.getName());
+//                medication.setCode(medicationD.getCode());
+//                medication.setWeight(medicationDTO.getWeight());
+//                medication.setImage(medicationDTO.getImage());
                 medicationRepository.save(medication);
             }else {
-                throw new MedicationNotSavedException(medicationDTO.getCode() + " is an invalid Code Format");
+               // throw new MedicationNotSavedException(medicationDTO.getCode() + " is an invalid Code Format");
             }
         }else {
-            throw new MedicationNotSavedException(medicationDTO.getName() +  " is An invalid Name Format");
+          //  throw new MedicationNotSavedException(medicationDTO.getName() +  " is An invalid Name Format");
         }
         return medication;
+    }
+
+    public List<Medication> getMedications(){
+        return medicationRepository.findAll();
+    }
+
+
+    public  Medication findMedicationByCode(String code){
+        return medicationRepository.findById(code)
+                .orElseThrow(()-> new MedicationNotFoundException(code));
     }
 
     public boolean validateName(String name){

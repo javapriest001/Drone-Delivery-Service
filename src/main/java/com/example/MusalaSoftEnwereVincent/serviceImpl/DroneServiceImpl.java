@@ -1,13 +1,20 @@
 package com.example.MusalaSoftEnwereVincent.serviceImpl;
 
+import com.example.MusalaSoftEnwereVincent.Response.*;
 import com.example.MusalaSoftEnwereVincent.enumeration.State;
 import com.example.MusalaSoftEnwereVincent.exception.DroneNotFoundException;
+import com.example.MusalaSoftEnwereVincent.exception.ExcessWeightException;
+import com.example.MusalaSoftEnwereVincent.exception.MedicationNotFoundException;
 import com.example.MusalaSoftEnwereVincent.model.Drone;
 import com.example.MusalaSoftEnwereVincent.model.Medication;
 import com.example.MusalaSoftEnwereVincent.repository.DroneRepository;
+import com.example.MusalaSoftEnwereVincent.repository.MedicationRepository;
 import com.example.MusalaSoftEnwereVincent.service.DroneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,15 +26,20 @@ import java.util.stream.Collectors;
 public class DroneServiceImpl implements DroneService {
 
     private final DroneRepository droneRepository;
+    private final MedicationRepository medicationRepository;
+    static List<Medication> medications = new ArrayList<>();
 
     @Autowired
-    public DroneServiceImpl(DroneRepository droneRepository) {
+    public DroneServiceImpl(DroneRepository droneRepository , MedicationRepository medicationRepository) {
         this.droneRepository = droneRepository;
+        this.medicationRepository = medicationRepository;
     }
 
     public  Drone findDroneById(String serialNumber){
-        return droneRepository.findById(serialNumber)
+       Drone searchedDrone = droneRepository.findById(serialNumber)
                 .orElseThrow(()-> new DroneNotFoundException(serialNumber));
+       searchedDrone.setMedication(medications);
+        return searchedDrone;
     }
 
     @Override
@@ -37,64 +49,62 @@ public class DroneServiceImpl implements DroneService {
 
 
     @Override
-    public Drone createDrone(Drone drone) {
-        return droneRepository.save(drone);
+    public RegisterResponse createDrone(Drone drone) {
+         droneRepository.save(drone);
+         return new RegisterResponse("Success", LocalDateTime.now(),  drone.getSerialNumber() );
     }
 
     @Override
-    public State checkingLoadStatus(String serialNumber) {
-        return  findDroneById(serialNumber).getStateOfDuty();
-    }
-
-    @Override
-    public List<Drone> getAvailableDrones(List<Drone> allDroneLists) {
-            return  allDroneLists.stream().filter(drone -> drone.getBatteryCapacity() >= 25 && drone.getStateOfDuty() == State.IDLE)
+    public AvailableDroneResponse getAvailableDrones(List<Drone> allDroneLists) {
+            List<Drone> availableDrones =   allDroneLists.stream().filter(drone -> drone.getBatteryCapacity() >= 25 && drone.getStateOfDuty() == State.IDLE)
                         .toList();
+            return  new AvailableDroneResponse("success" , LocalDateTime.now() , availableDrones);
     }
+
+
+    public LoadDroneResponse loadMedication(String droneSerialCode, String medicationCode){
+        LoadDroneResponse loadDroneResponse = new LoadDroneResponse();
+        Drone drone = findDroneById(droneSerialCode);
+        Medication medication = medicationRepository.findById(medicationCode)
+                .orElseThrow(()-> new MedicationNotFoundException(medicationCode));
+//        List<Medication> medications = new ArrayList<>();
+        int totalLoadedDroneWeight = drone.getMedication().stream()
+                .map(Medication::getWeight).toList()
+                .stream().reduce(0, Integer::sum);
+
+        if(drone.getStateOfDuty() == State.IDLE){
+           if (drone.getBatteryCapacity() >= 25){
+               if(totalLoadedDroneWeight <= 500){
+                   if (totalLoadedDroneWeight + medication.getWeight() <= 500){
+                       drone.setStateOfDuty(State.LOADING);
+                       if (!medications.contains(medication)){
+                           medications.add(medication);
+                           drone.setMedication(medications);
+                           drone.setStateOfDuty(State.LOADED);
+                           loadDroneResponse = new LoadDroneResponse("success" , LocalDateTime.now() , droneSerialCode , medications);
+                       }
+                   }else {
+                       throw new ExcessWeightException("The medication Weight Has Exceeded The Accepted Weight");
+                   }
+               }else{
+                   throw new ExcessWeightException("You Cant Add More Than 500gr to the Drone");
+               }
+           }
+        }
+        return loadDroneResponse;
+    }
+
 
 
     @Override
-    public boolean loadDrone(String serialNumber, List<Medication> medicationList) {
-        boolean isLoaded = false;
-        if(droneRepository.findById(serialNumber).isPresent()){
-            //if (droneRepository.existsById())
-            Drone drone = findDroneById(serialNumber);
-            List<Short> weightListOfExistingDrone = listOfMedicationWeight(drone.getMedication());
-            List<Short> inputWeightList = listOfMedicationWeight(medicationList);
-            short count = calculateMedicationWeight(weightListOfExistingDrone);
-            short inputMedicationCount = calculateMedicationWeight(inputWeightList);
-
-            if (drone.getBatteryCapacity() >= 25){
-                if(checkingLoadStatus(serialNumber) == State.IDLE || checkingLoadStatus(serialNumber) == State.LOADING && count < 500 ){
-                    if (count + inputMedicationCount <= 500){
-                        drone.setMedication(medicationList);
-                        drone.setStateOfDuty(State.LOADED);
-                        isLoaded = true;
-                    } else{
-                        System.out.println("Overloaded");
-                    }
-                }
-            }
-        }
-        return isLoaded;
-    }
-
-
-
-    public short calculateMedicationWeight(List<Short> medicationList){
-        short count = 0;
-        for(Short shortNum: medicationList){
-            count += shortNum;
-        }
-        return count;
-    }
-
-    public List<Short> listOfMedicationWeight(List<Medication> medicationList){
-       return medicationList.stream().map(Medication::getWeight).collect(Collectors.toList());
+    public LoadedMedicationResponse loadedMedicationsForADrone(String serialNumber) {
+        Drone drone = findDroneById(serialNumber);
+        return  new LoadedMedicationResponse("success" , LocalDateTime.now() , drone.getSerialNumber() ,  drone.getMedication() );
     }
 
     @Override
-    public int checkBatteryLevel(String serialNumber) {
-        return findDroneById(serialNumber).getBatteryCapacity();
+    public BatteryLevelResponse checkBatteryLevel(String serialNumber) {
+        int batteryLevel = findDroneById(serialNumber).getBatteryCapacity();
+        return  new BatteryLevelResponse("success" , LocalDateTime.now() , serialNumber , batteryLevel);
     }
 }
