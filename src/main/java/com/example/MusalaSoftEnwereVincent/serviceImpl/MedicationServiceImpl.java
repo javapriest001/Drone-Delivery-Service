@@ -23,19 +23,14 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Override
     public Medication createMedication(Medication medication) {
-      //  Medication medication = new Medication();
         if (validateName(medication.getName())){
             if (validateCode(medication.getCode())){
-//                medication.setName(medication.getName());
-//                medication.setCode(medicationD.getCode());
-//                medication.setWeight(medicationDTO.getWeight());
-//                medication.setImage(medicationDTO.getImage());
                 medicationRepository.save(medication);
             }else {
-               // throw new MedicationNotSavedException(medicationDTO.getCode() + " is an invalid Code Format");
+               throw new MedicationNotSavedException(medication.getCode() + " is an invalid Code Format");
             }
         }else {
-          //  throw new MedicationNotSavedException(medicationDTO.getName() +  " is An invalid Name Format");
+           throw new MedicationNotSavedException(medication.getName() +  " is An invalid Name Format");
         }
         return medication;
     }
