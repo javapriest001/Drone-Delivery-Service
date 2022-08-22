@@ -67,3 +67,25 @@ While implementing your solution **please take care of the following requirement
 - Required data must be preloaded in the database.
 - JUnit tests are optional but advisable (if you have time);
 - Advice: Show us how you work through your commit history.
+
+---
+
+#### How to build
+#### Requirements
+
+- Java 8;
+- Java IDE : IntelliJ (or Eclipse, Vscode, Netbeans);
+- Database: H2 Memory(All data will be preloaded on run);
+- Postman(For testing );
+
+Steps by step for building and runing the project locally;
+Clone the from the link git clone https://github.com/Cybermatepro/Drone-Delivery-Service.git
+![Screenshot (81)](https://user-images.githubusercontent.com/89165338/185836882-3e6187ff-e6df-4ce0-855a-b16d924ab9f0.png)
+
+- Open the cloned project in eclipse;
+
+- Go to POM.xml the update Project to update all the maven dependencies;
+
+-Maven Build the project and run;
+
+-Before running you can run the JUnit test cases to assert that everything is working correctly (I have included all of the JUnit tests);
