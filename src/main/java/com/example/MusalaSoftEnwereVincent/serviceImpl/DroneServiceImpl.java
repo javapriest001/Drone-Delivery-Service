@@ -1,5 +1,4 @@
 package com.example.MusalaSoftEnwereVincent.serviceImpl;
-
 import com.example.MusalaSoftEnwereVincent.Response.*;
 import com.example.MusalaSoftEnwereVincent.enumeration.State;
 import com.example.MusalaSoftEnwereVincent.exception.DroneNotFoundException;
@@ -16,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.stream.Collectors;
 
 //TODO: Introduce a periodic task to check drones battery levels and create history/audit event log for this.
@@ -32,6 +28,7 @@ public class DroneServiceImpl implements DroneService {
     private final DroneRepository droneRepository;
     private final MedicationRepository medicationRepository;
     static List<Medication> medications = new ArrayList<>();
+    static Map<Medication , String> medicationsList = new HashMap<>();
 
     @Autowired
     public DroneServiceImpl(DroneRepository droneRepository , MedicationRepository medicationRepository) {
@@ -42,7 +39,7 @@ public class DroneServiceImpl implements DroneService {
     public  Drone findDroneById(String serialNumber){
        Drone searchedDrone = droneRepository.findById(serialNumber)
                 .orElseThrow(()-> new DroneNotFoundException(serialNumber));
-       searchedDrone.setMedication(medications);
+     //  searchedDrone.setMedication(medications);
         return searchedDrone;
     }
 
@@ -79,11 +76,17 @@ public class DroneServiceImpl implements DroneService {
                if(totalLoadedDroneWeight <= 500){
                    if (totalLoadedDroneWeight + medication.getWeight() <= 500){
                        drone.setStateOfDuty(State.LOADING);
-                       if (!medications.contains(medication)){
-                           medications.add(medication);
-                           drone.setMedication(medications);
+                       if (!drone.getMedication().contains(medication)){
+                          // drone.getMedication().add(medication);
+                           medicationsList.put(medication, droneSerialCode);
+                           medicationsList.forEach((key , value) ->{
+                               if (value.equalsIgnoreCase(droneSerialCode)){
+                                   drone.getMedication().add(key);
+                               }
+                           });
+                          // drone.setMedication(medications);
                            drone.setStateOfDuty(State.LOADED);
-                           loadDroneResponse = new LoadDroneResponse("success" , LocalDateTime.now() , droneSerialCode , medications);
+                           loadDroneResponse = new LoadDroneResponse("success" , LocalDateTime.now() , droneSerialCode , drone.getMedication());
                        }
                    }else {
                        throw new ExcessWeightException("The medication Weight Has Exceeded The Accepted Weight");
@@ -99,6 +102,11 @@ public class DroneServiceImpl implements DroneService {
     @Override
     public LoadedMedicationResponse loadedMedicationsForADrone(String serialNumber) {
         Drone drone = findDroneById(serialNumber);
+        medicationsList.forEach((key , value) ->{
+            if (value.equalsIgnoreCase(serialNumber)){
+                drone.getMedication().add(key);
+            }
+        });
         return  new LoadedMedicationResponse("success" , LocalDateTime.now() , drone.getSerialNumber() ,  drone.getMedication() );
     }
 

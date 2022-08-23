@@ -14,7 +14,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping(value = "/drone")
+@RequestMapping(value = "/api")
 public class DroneController {
 
 

@@ -34,9 +34,9 @@ public class MusalaSoftEnwereVincentApplication implements CommandLineRunner {
 
         medicationRepository.save(newMed);
         medicationRepository.save(newMed2);
-        medicationRepository.save(new Medication("MD3" , "Ibuprofen",  50, "0xudbcf.png"));
-        medicationRepository.save(new Medication("MD4" , "Sidenafil",  150, "0xudbcf.png"));
-        medicationRepository.save(new Medication("MD5" , "7-keys",  50, "0xudbcf.png"));
+        medicationRepository.save(new Medication("MD1" , "Ibuprofen",  50, "0xudbcf.png"));
+        medicationRepository.save(new Medication("MD2" , "Sidenafil",  150, "0xudbcf.png"));
+        medicationRepository.save(new Medication("MD3" , "7-keys",  50, "0xudbcf.png"));
 
 //        System.out.println(medicationRepository.findAll());
 
